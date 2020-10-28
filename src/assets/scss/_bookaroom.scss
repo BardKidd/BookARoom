@@ -1,0 +1,29 @@
+html, body {
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    font-family: 'Open Sans';
+    font-size: $fontSize-base;
+}
+.fullScreen {
+    width: 100%;
+    height: 100vh;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.homepageConfiguration {
+    display: flex;
+    flex-wrap: wrap;
+}
+.homepageConfiguration_head {
+    // display: flex;
+    // flex-wrap: wrap;
+    > .homepageConfiguration_head_title {
+        color: $white;
+    }
+}
+// .homepageConfiguration_context {
+//     display: flex;
+//     flex-wrap: wrap;
+// }

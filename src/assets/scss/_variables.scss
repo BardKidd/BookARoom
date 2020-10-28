@@ -1,0 +1,28 @@
+@import './mixins';
+// font-size
+$fontSize-base: fontSize(12px);
+$fontSize-large: $fontSize-base * 2;
+$fontSize-title: $fontSize-base * 2.5;
+$fontSize-bigtitle: $fontSize-base * 3;
+$fontSize-superbigtitle: $fontSize-base * 3.5;
+
+// color
+$primary: #364677;
+$primary-lighten: lighten($primary, 20%);
+$primary-darken: darken($primary, 15%);
+$white: white;
+$black: black;
+$red: #E7006F;
+$red-prompt: darken($red, 10%);
+$gray-100: #eee;
+$gray-200: darken($gray-100, 10%);
+$gray-300: darken($gray-100, 20%);
+$gray-400: darken($gray-100, 30%);
+$gray-500: darken($gray-100, 40%);
+$other: #dec700;
+
+// font-style
+$font-family-chinese: '微軟正黑體', sans-serif;
+$font-family-chinese2: 'Noto Sans TC', sans-serif;
+$font-family-english: 'Arial', sans-serif;
+$font-family-english2: 'EB Garamond', sans-serif;
