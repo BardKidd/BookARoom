@@ -17,3 +17,13 @@ $basicFontSize: 16px;
         @content
     }
 }
+
+@mixin display_flex {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+@mixin display_inline-flex {
+    display: inline-flex;
+    flex-wrap: wrap;
+}

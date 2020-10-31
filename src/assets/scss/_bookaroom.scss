@@ -13,17 +13,37 @@ html, body {
     background-size: cover;
 }
 .homepageConfiguration {
-    display: flex;
-    flex-wrap: wrap;
+    @include display_flex;
+    padding: 5%;
 }
-.homepageConfiguration_head {
-    // display: flex;
-    // flex-wrap: wrap;
-    > .homepageConfiguration_head_title {
+.homepageConfiguration_main {
+    @include display_flex;
+    border: 1px solid green;
+}
+.homepageConfiguration_other {
+    @include display_flex;
+    color: $white;
+    border: 1px solid red;
+    align-content: space-between;
+
+}
+.homepageConfiguration_main_head {
+    @include display_inline-flex;
+    align-content: space-between;
+    height: 100%;
+    > .homepageConfiguration_main_head_title {
         color: $white;
+        > span:nth-child(1) {
+            opacity: 1;
+            line-height: fontSize(48px);
+        }
+        > span {
+            @include display_flex;
+            opacity: 0.8;
+            line-height: fontSize(32px);
+        }
     }
 }
-// .homepageConfiguration_context {
-//     display: flex;
-//     flex-wrap: wrap;
-// }
+.homepageConfiguration_main_context {
+    @include display_inline-flex;
+}
