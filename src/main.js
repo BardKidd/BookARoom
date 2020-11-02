@@ -11,6 +11,16 @@ Vue.config.productionTip = false
 Vue.use(VueAxios, axios)
 Vue.use(Vuex)
 
+axios.interceptors.request.use(
+  config => {
+    config.headers.Authorization = "Bearer " + process.env.VUE_APP_TOKEN;
+    config.headers.Accept = "application/json"
+    return config
+  },
+  err => {
+    return Promise.reject(err);
+  }
+)
 
 new Vue({
   router,

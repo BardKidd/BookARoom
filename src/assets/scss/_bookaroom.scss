@@ -8,24 +8,38 @@ html, body {
 .fullScreen {
     width: 100%;
     height: 100vh;
-    background-position: center;
+    background-position: top;
     background-repeat: no-repeat;
     background-size: cover;
+    &:before {
+        content: '';
+        width: 100%;
+        height: 100%;
+        opacity: 0.6;
+        background-color: $black;
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
 }
 .homepageConfiguration {
     @include display_flex;
-    padding: 5%;
+    padding: 7% 5%;
 }
 .homepageConfiguration_main {
     @include display_flex;
-    border: 1px solid green;
 }
 .homepageConfiguration_other {
-    @include display_flex;
+    position: absolute;
     color: $white;
-    border: 1px solid red;
-    align-content: space-between;
-
+    bottom: 5%;
+    margin-left: 12%;
+    > button {
+        background-color: transparent;
+        color: $white;
+        border: none;
+        outline: 0;
+    }
 }
 .homepageConfiguration_main_head {
     @include display_inline-flex;
@@ -46,4 +60,42 @@ html, body {
 }
 .homepageConfiguration_main_context {
     @include display_inline-flex;
+    > .homepageConfiguration_main_context_thumbnail {
+        width: 100%;
+        height: 100%;
+        > .thumbnail {
+            display: inline-flex;
+            flex-wrap: wrap;
+            padding-bottom: 32%;
+            background-repeat: no-repeat;
+            align-content: center;
+            // position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            margin-bottom: -1%;
+            &:hover {
+                transition: all .3s;
+                &:after {
+                    opacity: 0.6;
+                }
+            }
+            &:after {
+                display: flex;
+                flex-wrap: wrap;
+                transition: all .3s;
+                position: absolute;
+                content: '123';
+                background-color: $primary;
+                color: $white;
+                width: 100%;
+                left: 0;
+                top: 0;
+                padding-bottom: 100%;
+                opacity: 0;
+                justify-content: center;
+                align-items: center;
+                font-size: fontSize(26px);
+            }
+        }
+    }
 }

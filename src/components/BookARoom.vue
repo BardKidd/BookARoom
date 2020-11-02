@@ -14,20 +14,20 @@
             </article>
             <section class="homepageConfiguration_main_context col-9">
                 <div class="homepageConfiguration_main_context_thumbnail">
-                    <div :style="{ backgroundImage: `url(${ BG1 })` }"></div>
-                    <div :style="{ backgroundImage: `url(${ BG2 })` }"></div>
-                    <div :style="{ backgroundImage: `url(${ BG3 })` }"></div>
-                    <div :style="{ backgroundImage: `url(${ BG4 })` }"></div>
-                    <div :style="{ backgroundImage: `url(${ BG5 })` }"></div>
-                    <div :style="{ backgroundImage: `url(${ BG6 })` }"></div>
+                    <div class="thumbnail col-4" :style="{ backgroundImage: `url(${ Room1 })` }"></div>
+                    <div class="thumbnail col-4" :style="{ backgroundImage: `url(${ Room2 })` }"></div>
+                    <div class="thumbnail col-4" :style="{ backgroundImage: `url(${ Room3 })` }"></div>
+                    <div class="thumbnail col-4" :style="{ backgroundImage: `url(${ Room4 })` }"></div>
+                    <div class="thumbnail col-4" :style="{ backgroundImage: `url(${ Room5 })` }"></div>
+                    <div class="thumbnail col-4" :style="{ backgroundImage: `url(${ Room6 })` }"></div>
                 </div>
             </section>
         </div>
         <div class="homepageConfiguration_other">
-            <button>。</button>
-            <button>。</button>
-            <button>。</button>
-            <button>。</button>
+            <button><i class="fas fa-circle"></i></button>
+            <button><i class="far fa-circle"></i></button>
+            <button><i class="far fa-circle"></i></button>
+            <button><i class="far fa-circle"></i></button>
         </div>
     </div>
 </template>
@@ -43,6 +43,8 @@ import Room6 from '../assets/image/room6.png';
 export default {
     data() {
         return {
+            API: 'https://challenge.thef2e.com/api/thef2e2019/stage6/rooms',
+            token: process.env.VUE_APP_TOKEN,
             BG1,
             Room1,
             Room2,
@@ -52,5 +54,19 @@ export default {
             Room6
         };
     },
+    // methods: {
+    //     // getAllRooms() {
+    //     //     const vm = this;
+    //     //     // const api = 'https://challenge.thef2e.com/api/thef2e2019/stage6/rooms';
+    //     //     vm.$http.get(vm.API).then(response => {
+    //     //         console.log(response.data)
+    //     //     })
+    //     // }
+    // },
+    // created() {
+    //     this.$http.get(this.API).then(response => {
+    //         console.log(response.data);
+    //     })
+    // }
 };
 </script>
