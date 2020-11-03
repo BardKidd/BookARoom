@@ -31,14 +31,18 @@ html, body {
 }
 .homepageConfiguration_other {
     position: absolute;
-    color: $white;
     bottom: 5%;
     margin-left: 12%;
-    > button {
-        background-color: transparent;
+    &--color {
         color: $white;
-        border: none;
-        outline: 0;
+    }
+    > .homepageConfiguration_other_btn {
+        &--style {
+            background-color: transparent;
+            color: $white;
+            border: none;
+            outline: 0;
+        }
     }
 }
 .homepageConfiguration_main_head {
@@ -66,12 +70,14 @@ html, body {
         > .thumbnail {
             display: inline-flex;
             flex-wrap: wrap;
+            position: relative;
             padding-bottom: 32%;
             background-repeat: no-repeat;
-            align-content: center;
-            // position: relative;
+            align-items: center;
             overflow: hidden;
             cursor: pointer;
+            background-size: cover;
+            background-position: center 80%;
             margin-bottom: -1%;
             &:hover {
                 transition: all .3s;
@@ -84,7 +90,7 @@ html, body {
                 flex-wrap: wrap;
                 transition: all .3s;
                 position: absolute;
-                content: '123';
+                content: '';
                 background-color: $primary;
                 color: $white;
                 width: 100%;
