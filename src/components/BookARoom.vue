@@ -14,7 +14,9 @@
             </article>
             <section class="homepageConfiguration_main_context col-9">
                 <div class="homepageConfiguration_main_context_thumbnail">
-                    <div class="thumbnail col-4" v-for="(item, key) in totalRooms" :key="key" :style="{ backgroundImage: `url(${ item.imageUrl })` }">{{ item.name }}</div>
+                    <div class="thumbnail col-4" v-for="(item, key) in totalRooms" :key="key" :style="{ backgroundImage: `url(${ item.imageUrl })` }" @click.prevent="seeMore(item.id)">
+                        <span>{{ item.name }}</span>
+                    </div>
                 </div>
             </section>
         </div>
@@ -35,8 +37,21 @@ export default {
             API: 'https://challenge.thef2e.com/api/thef2e2019/stage6/rooms',
             token: process.env.VUE_APP_TOKEN,
             totalRooms: [],
-            BG1
+            BG1,
+            roomId: ''
         };
+    },
+    methods: {
+        seeMore(id) {
+            const vm = this;
+            const api = `https://challenge.thef2e.com/api/thef2e2019/stage6/room/${id}`;
+            vm.roomId = id
+            vm.$http.get(api).then(response => {
+                if(response.data.success) {
+                    vm.$router.push(`room/${vm.roomId}`)
+                }
+            })
+        }
     },
     created() {
         this.$http.get(this.API).then(response => {
