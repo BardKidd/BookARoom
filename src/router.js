@@ -11,7 +11,7 @@ export default new VueRouter({
             component: () => import('./components/BookARoom.vue')
         },
         {
-            path: '/room:roomId',
+            path: '/room/:roomId',
             name: 'Rooms',
             component: () => import('./components/Rooms.vue')
         }

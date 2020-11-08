@@ -16,14 +16,13 @@ export default {
             const vm = this;
             const api = `https://challenge.thef2e.com/api/thef2e2019/stage6/room/${vm.roomId}`;
             vm.$http.get(api).then(response => {
-                console.log(response.data)
+                console.log(response.data.room)
             })
         }
     },
     created() {
         this.roomId = this.$route.params.roomId;
         this.getRoomData();
-        console.log('OK')
     }
 }
 </script>

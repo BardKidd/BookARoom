@@ -56,7 +56,7 @@ export default {
     created() {
         this.$http.get(this.API).then(response => {
             this.totalRooms = response.data.items;
-            console.log(this.totalRooms)
+            // console.log(this.totalRooms)
         })
     }
 };
