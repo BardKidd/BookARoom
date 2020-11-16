@@ -1,0 +1,62 @@
+.bookRoom {
+    display: inline-flex;
+    flex-wrap: wrap;
+    width: 100%;
+    height: 100%;
+    padding: 5%;
+    background-repeat: no-repeat;
+    background-size: cover;
+    > .bookRoom_back {
+        color: $primary;
+        font-size: fontSize(14px);
+        width: 100%;
+    }
+    > .bookRoom_booking {
+        width: 65%;
+        position: relative;
+        text-align: center;
+        margin: 0 auto;
+    }
+    > .bookRoom_list {
+        width: 100%;
+    }
+    > .bookRoom_grid {
+        @include display_flex;
+    }
+}
+.bookRoom_booking_price {
+    width: 100%;
+    > .bookRoom_booking_price_money {
+        font-size: fontSize(36px);
+        color: $primary;
+    }
+    > .bookRoom_booking_price_night {
+        font-size: fontSize(20px);
+        color: $primary;
+        &:before {
+            content: '/';
+            margin: 0 1rem;
+        }
+    }
+}
+.money {
+    &:before {
+        content: '$';
+    }
+}
+.bookingBtn {
+    padding: 3% 5%;
+    color: $white;
+    background-color: $primary;
+}
+.bookingBtn_now {
+    border: none;
+    font-size: fontSize(20px);
+    width: 100%;
+    position: relative;
+}
+
+.roomData {
+    display: inline-flex;
+    flex-wrap: wrap;
+}
