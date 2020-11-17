@@ -1,27 +1,33 @@
 .bookRoom {
-    display: inline-flex;
-    flex-wrap: wrap;
     width: 100%;
-    height: 100%;
+    height: 100vh;
     padding: 5%;
     background-repeat: no-repeat;
     background-size: cover;
+    position: fixed;
     > .bookRoom_back {
         color: $primary;
         font-size: fontSize(14px);
         width: 100%;
+        justify-content: flex-start;
     }
     > .bookRoom_booking {
-        width: 65%;
+        width: 60%;
         position: relative;
         text-align: center;
         margin: 0 auto;
+        top: 70%;
     }
     > .bookRoom_list {
         width: 100%;
+        margin: 0 auto;
+        position: relative;
+        top: 80%;
+        justify-content: center;
     }
     > .bookRoom_grid {
         @include display_flex;
+        align-content: center;
     }
 }
 .bookRoom_booking_price {
@@ -55,8 +61,42 @@
     width: 100%;
     position: relative;
 }
+.bookRoom_list_btn {
+    border: none;
+}
+.bookRoom_list_btn--color {
+    color: $primary;
+    background-color: transparent;
+}
 
 .roomData {
-    display: inline-flex;
-    flex-wrap: wrap;
+    position: absolute;
+    right: 0;
+    color: $primary;
+    padding: 1% 2%;
+    > .roomData_title {
+        font-size: fontSize(40px);
+        display: inline-block;
+        margin-bottom: 4rem;
+    }
+    > .roomData_subtitle {
+        font-size: fontSize(14px);
+        font-weight: bolder;
+        position: relative;
+        left: 45%;
+    }
+    > .roomData_content {
+        font-size: fontSize(14px);
+        line-height: fontSize(24px);
+        font-weight: 500;
+        margin-bottom: 3.5rem;
+    }
+    > .roomData_precaution {
+        @include display_inline-flex;
+        align-content: center;
+    }
+}
+.roomData_precaution_box {
+    margin-right: 5rem;
+    margin-bottom: 3rem;
 }
