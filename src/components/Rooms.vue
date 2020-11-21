@@ -413,7 +413,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-body">
-                        <article class="col-5">
+                        <article class="col-5 boxGrid">
                             <form>
                                 <div class="form-group">
                                     <label for="formGroupExampleInput"
@@ -477,18 +477,75 @@
                                     <span class="money">9999</span>
                                 </div>
                                 <button>確定送出</button>
-                                <p>此預約系統僅預約功能，並不會針對您進行收費</p>
+                                <p>
+                                    此預約系統僅預約功能，並不會針對您進行收費
+                                </p>
                             </form>
                         </article>
-                        <article class="col-7">
-                            <button
-                                type="button"
-                                class="close"
-                                data-dismiss="modal"
-                                aria-label="Close"
-                            >
-                                <span aria-hidden="true">&times;</span>
-                            </button>
+                        <article class="col-7 boxGrid">
+                            <div class="model-header">
+                                <button
+                                    type="button"
+                                    class="close"
+                                    data-dismiss="modal"
+                                    aria-label="Close"
+                                >
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <!-- 房間資訊 -->
+                            <div>
+                                <h3>Single Room</h3>
+                                <span
+                                    >1人・ 單人床・附早餐・
+                                    衛浴1間・18平方公尺</span
+                                >
+                                <span
+                                    >平日（一～四）價格：1380 /
+                                    假日（五〜日）價格：1500</span
+                                >
+                                <div>
+                                    <div>
+                                        <span>icon</span>
+                                        <span>早餐</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- 訂房資訊 -->
+                            <div>
+                                <h3>訂房資訊</h3>
+                                <span
+                                    >・入住時間：最早15：00，最晚21：00；退房時間：10：00，請自行確認行程安排。</span
+                                >
+                                <span
+                                    >・平日定義週一至週四；假日定義週五至週日及國定假日。</span
+                                >
+                                <span>・好室旅店全面禁止吸菸。</span>
+                                <span
+                                    >・若您有任何問題，歡迎撥打 03-8321155 (
+                                    服務時間 週一至週六 10:00 - 18:00 )。</span
+                                >
+                            </div>
+                            <!-- 預約流程 -->
+                            <div>
+                                <h3>預約流程</h3>
+                                <div>
+                                    <div>
+                                        <span>icon</span>
+                                        <span>說明</span>
+                                    </div>
+                                    <span>> 符號</span>
+                                    <div>
+                                        <span>icon</span>
+                                        <span>說明</span>
+                                    </div>
+                                    <span>> 符號</span>
+                                    <div>
+                                        <span>icon</span>
+                                        <span>說明</span>
+                                    </div>
+                                </div>
+                            </div>
                         </article>
                     </div>
                 </div>

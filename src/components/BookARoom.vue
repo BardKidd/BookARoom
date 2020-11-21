@@ -1,5 +1,5 @@
 <template>
-    <div class="fullScreen homepageConfiguration" :style="{ backgroundImage: `url(${ BG1 })` }">
+    <div class="fullScreen homepageConfiguration" :style="{ backgroundImage: 'url(' + allBG[show] + ')' }">
         <div class="container homepageConfiguration_main">
             <article class="homepageConfiguration_main_head col-3">
                 <div class="homepageConfiguration_main_head_logo">
@@ -21,15 +21,15 @@
             </section>
         </div>
         <div class="homepageConfiguration_other homepageConfiguration_other--color">
-            <button class="homepageConfiguration_other_btn homepageConfiguration_other_btn--style"><i class="fas fa-circle"></i></button>
-            <button class="homepageConfiguration_other_btn homepageConfiguration_other_btn--style"><i class="far fa-circle"></i></button>
-            <button class="homepageConfiguration_other_btn homepageConfiguration_other_btn--style"><i class="far fa-circle"></i></button>
-            <button class="homepageConfiguration_other_btn homepageConfiguration_other_btn--style"><i class="far fa-circle"></i></button>
+            <button class="homepageConfiguration_other_btn homepageConfiguration_other_btn--style" @click.prevent="changeBG(key)" v-for="(item, key) in allBG" :key="key"><i class="far fa-circle" :class="{ 'fas': isActive === key }" @click="isActive = key"></i></button>
         </div>
     </div>
 </template>
 <script>
 import BG1 from "../assets/image/BG1.png";
+import BG2 from "../assets/image/BG2.png";
+import BG3 from "../assets/image/BG3.png";
+import BG4 from "../assets/image/BG4.png";
 
 export default {
     data() {
@@ -38,7 +38,13 @@ export default {
             token: process.env.VUE_APP_TOKEN,
             totalRooms: [],
             BG1,
-            roomId: ''
+            BG2,
+            BG3,
+            BG4,
+            allBG: [BG1, BG2, BG3, BG4],
+            roomId: '',
+            show: 0,
+            isActive: ''
         };
     },
     methods: {
@@ -51,6 +57,11 @@ export default {
                     vm.$router.push(`room/${vm.roomId}`)
                 }
             })
+        },
+        changeBG(key) {
+            const vm = this;
+            vm.show = key;
+            // vm.isActive = !vm.isActive;
         }
     },
     created() {
