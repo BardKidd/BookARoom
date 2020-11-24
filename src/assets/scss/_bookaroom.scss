@@ -11,6 +11,7 @@ html, body {
     background-position: top;
     background-repeat: no-repeat;
     background-size: cover;
+    overflow: hidden;
     &:before {
         content: '';
         width: 100%;
@@ -28,11 +29,15 @@ html, body {
 }
 .homepageConfiguration_main {
     @include display_flex;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 .homepageConfiguration_other {
     position: absolute;
     bottom: 5%;
-    margin-left: 12%;
+    margin-left: 17.5%;
     &--color {
         color: $white;
     }
@@ -49,10 +54,10 @@ html, body {
 }
 .homepageConfiguration_main_head {
     @include display_inline-flex;
-    align-content: space-between;
-    height: 100%;
     > .homepageConfiguration_main_head_title {
         color: $white;
+        position: absolute;
+        bottom: 0;
         > span:nth-child(1) {
             opacity: 1;
             line-height: fontSize(48px);
@@ -104,5 +109,28 @@ html, body {
                 transform: translate(-50%, -50%);
             }
         }
+    }
+}
+
+.fade-out_in {
+    animation: outIn 1s;
+}
+.fade-leave-to {
+    animation: inOut 1s;
+}
+@keyframes outIn {
+    0% {
+        filter: contrast(3);
+    }
+    100% {
+        filter: contrast(1);
+    }
+}
+@keyframes inOut {
+    0% {
+        filter: contrast(3);
+    }
+    100% {
+        filter: contrast(1);
     }
 }

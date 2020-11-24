@@ -1,37 +1,28 @@
 <template>
-    <div class="fullScreen homepageConfiguration" :style="{ backgroundImage: 'url(' + allBG[show] + ')' }">
-        <div class="container homepageConfiguration_main">
-            <article class="homepageConfiguration_main_head col-3">
-                <div class="homepageConfiguration_main_head_logo">
-                    <img src="../assets/image/logo.png" alt="" />
-                </div>
-                <div class="homepageConfiguration_main_head_title">
-                    <span>好室旅店。HOUSE HOTEL</span>
-                    <span>花蓮縣花蓮市國聯一路1號</span>
-                    <span>03-8321155</span>
-                    <span>HOUSE@HOTEL.COM</span>
-                </div>
-            </article>
-            <section class="homepageConfiguration_main_context col-9">
-                <div class="homepageConfiguration_main_context_thumbnail">
-                    <div class="thumbnail col-4" v-for="(item, key) in totalRooms" :key="key" :style="{ backgroundImage: `url(${ item.imageUrl })` }" @click.prevent="seeMore(item.id)">
-                        <span>{{ item.name }}</span>
-                    </div>
-                </div>
-            </section>
-        </div>
+    <div>
+        <transition name="fade" mode="out-in" appear appear-active-class="fade-out_in">
+            <div class="fullScreen homepageConfiguration" :class="[ isAnimation ? 'fade-out_in' : 'fade-leave-to']" :style="{ backgroundImage: 'url(' + allBG[show] + ')' }"></div>
+        </transition>
+        <home-page></home-page>
         <div class="homepageConfiguration_other homepageConfiguration_other--color">
-            <button class="homepageConfiguration_other_btn homepageConfiguration_other_btn--style" @click.prevent="changeBG(key)" v-for="(item, key) in allBG" :key="key"><i class="far fa-circle" :class="{ 'fas': isActive === key }" @click="isActive = key"></i></button>
+            <button class="homepageConfiguration_other_btn homepageConfiguration_other_btn--style" @click.prevent="changeBG(key)" v-for="(item, key) in allBG" :key="key">
+                <i class="far fa-circle" :class="{ 'fas': isActive === key }" @click="isActive = key"></i>
+            </button>
         </div>
     </div>
+    
 </template>
 <script>
+import HomePage from "./HomePage.vue";
 import BG1 from "../assets/image/BG1.png";
 import BG2 from "../assets/image/BG2.png";
 import BG3 from "../assets/image/BG3.png";
 import BG4 from "../assets/image/BG4.png";
 
 export default {
+    components: {
+        HomePage
+    },
     data() {
         return {
             API: 'https://challenge.thef2e.com/api/thef2e2019/stage6/rooms',
@@ -44,31 +35,34 @@ export default {
             allBG: [BG1, BG2, BG3, BG4],
             roomId: '',
             show: 0,
-            isActive: ''
+            isActive: 0,
+            isAnimation: true
         };
     },
     methods: {
-        seeMore(id) {
-            const vm = this;
-            const api = `https://challenge.thef2e.com/api/thef2e2019/stage6/room/${id}`;
-            vm.roomId = id
-            vm.$http.get(api).then(response => {
-                if(response.data.success) {
-                    vm.$router.push(`room/${vm.roomId}`)
-                }
-            })
-        },
         changeBG(key) {
             const vm = this;
             vm.show = key;
-            // vm.isActive = !vm.isActive;
+            vm.isAnimation = !vm.isAnimation;
         }
     },
     created() {
-        this.$http.get(this.API).then(response => {
-            this.totalRooms = response.data.items;
-            // console.log(this.totalRooms)
+        const vm = this;
+        vm.$http.get(vm.API).then(response => {
+            vm.totalRooms = response.data.items;
         })
+    },
+    mounted() {
+        const vm = this;
+        setInterval(() => {
+            vm.show++
+            vm.isActive++
+            vm.isAnimation = !vm.isAnimation;
+            if (vm.show === vm.allBG.length) {
+                vm.show = 0
+                vm.isActive = 0
+            }
+        }, 5000)
     }
 };
 </script>

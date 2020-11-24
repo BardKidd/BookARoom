@@ -83,7 +83,7 @@
         font-size: fontSize(14px);
         font-weight: bolder;
         position: relative;
-        left: 45%;
+        left: 35%;
     }
     > .roomData_content {
         font-size: fontSize(14px);
@@ -99,6 +99,16 @@
 .roomData_precaution_box {
     margin-right: 5rem;
     margin-bottom: 3rem;
+    position: relative;
+    > .roomData_precaution_box_yes {
+        position: absolute;
+    }
+    > .roomData_precaution_box_text {
+        position: absolute;
+        font-size: fontSize(12px);
+        left: 20%;
+        top: 110%;
+    }
 }
 .rooomData_monthly_title {
     font-size: fontSize(14px);
