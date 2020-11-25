@@ -50,12 +50,12 @@
         <article class="col-7 roomData">
             <h1 class="roomData_title">{{ roomData.name }}</h1>
             <span class="roomData_subtitle"
-                >1人·單人床·附早餐·衛浴1間·18平方公尺</span
+                >{{ roomData.descriptionShort.GuestMin }}~{{ roomData.descriptionShort.GuestMax }}人·{{ roomData.descriptionShort.Bed.length }}床·附早餐·衛浴{{ roomData.descriptionShort['Private-Bath'] }}間·{{ roomData.descriptionShort.Footage }}平方公尺</span
             >
             <section class="roomData_content">
-                <p>平日（一～四）價格：1380 / 假日（五〜日）價格：1500</p>
-                <p>入住時間：15：00（最早）/ 21：00（最晚）</p>
-                <p>退房時間：10：00</p>
+                <p>平日（一～四）價格：{{ roomData.normalDayPrice }} / 假日（五〜日）價格：{{ roomData.holidayPrice }}</p>
+                <p>入住時間：{{ roomData.checkInAndOut.checkInEarly }}（最早）/ {{ roomData.checkInAndOut.checkInLate }}（最晚）</p>
+                <p>退房時間：{{ roomData.checkInAndOut.checkOut }}</p>
             </section>
             <section class="roomData_content">
                 <p>・單人間僅供一位客人使用。</p>
@@ -67,7 +67,7 @@
             </section>
             <section class="roomData_precaution">
                 <div class="roomData_precaution_box" v-for="(icon, key) in allSvg" :key="key">
-                    <span class="roomData_precaution_box_icon"></span>
+                    <span class="roomData_precaution_box_icon">{{ allSvg[key] }}</span>
                     <span class="roomData_precaution_box_yes"></span>
                 </div>
             </section>
@@ -277,7 +277,7 @@ export default {
             vm.$http.get(api).then((response) => {
                 vm.roomData = response.data.room[0];
                 vm.roomAmenities = response.data.room[0].amenities;
-                console.log(vm.roomAmenities);
+                console.log(vm.roomData);
 
             });
         },
@@ -285,19 +285,18 @@ export default {
             $("#bookingOrder").modal("show");
         },
         iconView() {
-            // const vm = this;
-            let num = 1;
-            let num2 = 98;
-            let iconTemplate = document.querySelectorAll('roomData_precaution_box_icon');
-            let iconYN = document.querySelectorAll('roomData_precaution_box_yes');
-            let iconElement = document.createElement(`icon${num}`);
-            let yOrNo = document.createElement(`icon${num2}`)
-            iconTemplate.appendChild(iconElement);
-            iconYN.appendChild(yOrNo);
+            // // const vm = this;
+            // // let num = 1;
+            // // let num2 = 98;
+            // let iconTemplate = document.querySelectorAll('.roomData_precaution_box_icon');
+            // // let iconYN = document.querySelectorAll('roomData_precaution_box_yes');
+            // let iconElement = document.createElement('icon1');
+            // // let yOrNo = document.createElement(`icon98`)
+            // iconTemplate.forEach((item) => {
+            //     item.appendChild(iconElement);
+            // })
+            // // iconYN.appendChild(yOrNo);
         }
-    },
-    computed: {
-        
     },
     created() {
         this.roomId = this.$route.params.roomId;
