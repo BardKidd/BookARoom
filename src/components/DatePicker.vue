@@ -1,16 +1,47 @@
 <template>
-    <datepicker class="datepicker"></datepicker>
+    <div>
+        <DatePicker class="datepicker" v-model="date" :formatter="momentFormat" format="YYYY-MM-dd" :inline="true" range></DatePicker>
+        <p>{{ date }}</p>
+    </div>
 </template>
-<style lang="scss" scoped>
-    .datepicker {
-        margin-bottom: 1rem;
-    }
-</style>
 <script>
-import datepicker from 'vuejs-datepicker';
+import DatePicker from 'vue2-datepicker';
+import 'vue2-datepicker/index.css';
 export default {
     components: {
-        datepicker
-    }
+        DatePicker
+    },
+    data() {
+        return {
+            date: "",
+            momentFormat: {
+                stringify: {
+                    stringify: (date) => {
+                        return date ? moment(date.format('LL')) : ''
+                    }
+                }
+            }
+            // disabledDates: {
+            //     to: new Date(2020, 10, 20)
+            // }
+            // timePickerOptions: {
+
+            // }
+        }
+    },
+    methods: {
+        // today() {
+        //     const vm = this;
+        //     let date = new Date()
+        //     let day = date.getDate();
+        //     let month = date.getMonth() + 1;
+        //     let year = date.getFullYear();
+        //     console.log(year, month, day)
+        //     vm.disabledDates.to = new Date(`${year}, ${month}, ${day}`)
+        // }
+    },
+    // created() {
+    //     this.today();
+    // }
 }
 </script>

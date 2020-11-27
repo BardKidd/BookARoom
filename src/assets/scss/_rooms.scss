@@ -63,6 +63,8 @@
 }
 .bookRoom_list_btn {
     border: none;
+    padding: 0;
+    margin-right: 1rem;
 }
 .bookRoom_list_btn--color {
     color: $primary;
@@ -100,14 +102,18 @@
     margin-right: 5rem;
     margin-bottom: 3rem;
     position: relative;
+    > .roomData_precaution_box_icon {
+        opacity: 0.3;
+        &--style {
+            opacity: 1;
+        }
+    }
     > .roomData_precaution_box_yes {
         position: absolute;
-    }
-    > .roomData_precaution_box_text {
-        position: absolute;
-        font-size: fontSize(12px);
-        left: 20%;
-        top: 110%;
+        left: 110%;
+        &--style {
+            opacity: 0.3;
+        }
     }
 }
 .rooomData_monthly_title {

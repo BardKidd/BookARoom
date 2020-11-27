@@ -1,7 +1,7 @@
 <template>
     <div>
         <!-- 訂房簡介 -->
-        <article class="col-5 bookRoom" :style="{ backgroundImage: `url(${Room1})` }">
+        <article class="col-5 bookRoom" :style="{ backgroundImage: 'url(' + allRoom[show] + ')' }">
             <router-link to="/" href="#" class="bookRoom_back bookRoom_grid">
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -34,20 +34,14 @@
             </section>
 
             <section class="bookRoom_list bookRoom_grid">
-                <button class="bookRoom_list_btn bookRoom_list_btn--color">
-                    <i class="fas fa-circle"></i>
-                </button>
-                <button class="bookRoom_list_btn bookRoom_list_btn--color">
-                    <i class="far fa-circle"></i>
-                </button>
-                <button class="bookRoom_list_btn bookRoom_list_btn--color">
-                    <i class="far fa-circle"></i>
+                <button class="bookRoom_list_btn bookRoom_list_btn--color" v-for="(item, key) in allRoom" :key="key" @click="changeBG(key)">
+                    <i class="far fa-circle" :class="{ 'fas': isActive === key }" @click="isActive = key"></i>
                 </button>
             </section>
         </article>
 
         <!-- 房間資訊 -->
-        <article class="col-7 roomData">
+        <article class="col-7 roomData" v-if="roomData.descriptionShort.Bed">
             <h1 class="roomData_title">{{ roomData.name }}</h1>
             <span class="roomData_subtitle"
                 >{{ roomData.descriptionShort.GuestMin }}~{{ roomData.descriptionShort.GuestMax }}人·{{ roomData.descriptionShort.Bed.length }}床·附早餐·衛浴{{ roomData.descriptionShort['Private-Bath'] }}間·{{ roomData.descriptionShort.Footage }}平方公尺</span
@@ -67,8 +61,9 @@
             </section>
             <section class="roomData_precaution">
                 <div class="roomData_precaution_box" v-for="(icon, key) in allSvg" :key="key">
-                    <span class="roomData_precaution_box_icon">{{ allSvg[key] }}</span>
-                    <span class="roomData_precaution_box_yes"></span>
+                    <span class="roomData_precaution_box_icon" :is="icon.tag" :data-iconBoolean="allSvgBoolean[key]" :class="[allSvgBoolean[key] ? 'roomData_precaution_box_icon--style' : '']"></span>
+                    <span class="roomData_precaution_box_yes" v-if="allSvgBoolean[key]" :is="yesOrNo[0].tag"></span>
+                    <span class="roomData_precaution_box_yes roomData_precaution_box_yes--style " v-else :is="yesOrNo[1].tag"></span>
                 </div>
             </section>
             <section class="rooomData_monthly">
@@ -225,6 +220,8 @@
 <script>
 import $ from "jquery";
 import Room1 from "../assets/image/room1.png";
+import Room2 from "../assets/image/seeroom2.png";
+import Room3 from "../assets/image/seeroom3.png";
 import DatePicker from "./DatePicker";
 import icon1 from "../assets/icon/icon1.svg";
 import icon2 from "../assets/icon/icon2.svg";
@@ -249,25 +246,62 @@ export default {
     data() {
         return {
             roomId: "",
-            Room1,
-            icon1,
-            icon2,
-            icon3,
-            icon4,
-            icon5,
-            icon6,
-            icon7,
-            icon8,
-            icon9,
-            icon10,
-            icon11,
-            icon12,
-            icon98,
-            icon99,
-            roomData: {},
+            allRoom: [Room1, Room2, Room3],
+            show: 0,
+            isActive: 0,
+            roomData: {
+                descriptionShort: {
+                    GuestMin: 0
+                }
+            },
             roomAmenities: {},
-            allSvg: [icon1, icon2, icon3, icon4, icon5, icon6, icon7, icon8, icon9, icon10, icon11, icon12],
-            yesOrNo: [icon98, icon99]
+            allSvg: [
+                {
+                    tag: icon1,
+                },
+                {
+                    tag: icon2,
+                },
+                {
+                    tag: icon3,
+                },
+                {
+                    tag: icon4,
+                },
+                {
+                    tag: icon5,
+                },
+                {
+                    tag: icon6,
+                },
+                {
+                    tag: icon7,
+                },
+                {
+                    tag: icon8,
+                },
+                {
+                    tag: icon9,
+                },
+                {
+                    tag: icon10,
+                },
+                {
+                    tag: icon11,
+                },
+                {
+                    tag: icon12,
+                }
+            ],
+            allSvgBoolean: [],
+            yesOrNo: [
+                { 
+                    tag: icon98
+                }, 
+                {
+                    tag: icon99
+                }
+            ],
         };
     },
     methods: {
@@ -276,32 +310,24 @@ export default {
             const api = `https://challenge.thef2e.com/api/thef2e2019/stage6/room/${vm.roomId}`;
             vm.$http.get(api).then((response) => {
                 vm.roomData = response.data.room[0];
-                vm.roomAmenities = response.data.room[0].amenities;
-                console.log(vm.roomData);
-
+                vm.roomAmenities = vm.roomData.amenities;
+                for (let item in vm.roomAmenities) {
+                    vm.allSvgBoolean.push(vm.roomAmenities[item])
+                }
             });
         },
         openOrder() {
             $("#bookingOrder").modal("show");
         },
-        iconView() {
-            // // const vm = this;
-            // // let num = 1;
-            // // let num2 = 98;
-            // let iconTemplate = document.querySelectorAll('.roomData_precaution_box_icon');
-            // // let iconYN = document.querySelectorAll('roomData_precaution_box_yes');
-            // let iconElement = document.createElement('icon1');
-            // // let yOrNo = document.createElement(`icon98`)
-            // iconTemplate.forEach((item) => {
-            //     item.appendChild(iconElement);
-            // })
-            // // iconYN.appendChild(yOrNo);
+        changeBG(key) {
+            const vm = this;
+            vm.show = key;
+            vm.isAnimation = !vm.isAnimation;
         }
     },
     created() {
         this.roomId = this.$route.params.roomId;
         this.getRoomData();
-        this.iconView();
     },
 };
 </script>
