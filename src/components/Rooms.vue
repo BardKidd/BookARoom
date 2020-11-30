@@ -1,33 +1,24 @@
 <template>
     <div>
         <!-- 訂房簡介 -->
-        <article class="col-5 bookRoom" :style="{ backgroundImage: 'url(' + allRoom[show] + ')' }">
+        <article class="col-5 bookRoom">
+            <div class="bookRoom_BG" :style="{ backgroundImage: 'url(' + allRoom[show] + ')' }" @click.prevent="openBigBG"></div>
             <router-link to="/" href="#" class="bookRoom_back bookRoom_grid">
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="8.316"
-                    height="15.874"
-                    viewBox="0 0 8.316 15.874"
-                >
-                    <g transform="translate(-14 -3.991)">
-                        <path
-                            class="a"
-                            d="M21.925,3.992a.367.367,0,0,0-.26.114L14.111,11.66a.378.378,0,0,0,0,.534l7.555,7.555a.378.378,0,1,0,.534-.534l-7.288-7.288L22.2,4.64a.377.377,0,0,0,.084-.418A.373.373,0,0,0,21.925,3.992Z"
-                            transform="translate(0 0)"
-                        />
-                    </g>
-                </svg>
+                <arrow></arrow>
                 <span>查看其他房型</span>
             </router-link>
 
             <section class="bookRoom_booking bookRoom_grid">
                 <div class="bookRoom_booking_price">
-                    <span class="bookRoom_booking_price_money money">9999</span>
-                    <span class="bookRoom_booking_price_night">1晚</span>
+                    <span class="bookRoom_booking_price_money money" v-if="allDay.length > 0">{{ normalDay.length * roomData.normalDayPrice + holiDay.length * roomData.holidayPrice }}</span>
+                    <span class="bookRoom_booking_price_money money" v-else>{{ roomData.normalDayPrice }}</span>
+
+                    <span class="bookRoom_booking_price_night" v-if="allDay.length > 0">{{ allDay.length }} 晚</span>
+                    <span class="bookRoom_booking_price_night" v-else>1 晚</span>
                 </div>
                 <button
                     class="bookingBtn bookingBtn_now"
-                    @click.prevent="openOrder()"
+                    @click.prevent="bookingBtn"
                 >
                     Booking now
                 </button>
@@ -39,6 +30,29 @@
                 </button>
             </section>
         </article>
+
+        <!-- 圖片瀏覽 -->
+        <!-- <div id="carouselExampleControls" class="carousel slide" data-ride="carousel" :class="{ 'displayNone': openBGBig === false }">
+            <div class="carousel-inner">
+                <div class="carousel-item">
+                    <img :src="allRoom[0]" class="d-block w-100" alt="...">
+                </div>
+                <div class="carousel-item">
+                    <img :src="allRoom[1]" class="d-block w-100" alt="...">
+                </div>
+                <div class="carousel-item">
+                    <img :src="allRoom[2]" class="d-block w-100" alt="...">
+                </div>
+            </div>
+            <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>
+        </div> -->
 
         <!-- 房間資訊 -->
         <article class="col-7 roomData" v-if="roomData.descriptionShort.Bed">
@@ -68,161 +82,46 @@
             </section>
             <section class="rooomData_monthly">
                 <p class="rooomData_monthly_title">空房狀態查詢</p>
-                <DatePicker></DatePicker>
+                <div>
+                    <DatePicker class="datepicker" @change="getAllDay" value-type="timestamp" v-model="value" :default-value="new Date()" :disabled-date="disabledDates" :inline="true" range></DatePicker>
+                </div>
             </section>
         </article>
 
         <!-- Order -->
-        <div class="modal" tabindex="-1" role="dialog" id="bookingOrder">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-body">
-                        <article class="col-5 boxGrid">
-                            <form>
-                                <div class="form-group">
-                                    <label for="formGroupExampleInput"
-                                        >姓名</label
-                                    >
-                                    <input
-                                        type="text"
-                                        class="form-control"
-                                        id="formGroupExampleInput"
-                                        placeholder="Example input"
-                                    />
-                                </div>
-                                <div class="form-group">
-                                    <label for="formGroupExampleInput2"
-                                        >手機</label
-                                    >
-                                    <input
-                                        type="text"
-                                        class="form-control"
-                                        id="formGroupExampleInput2"
-                                        placeholder="Another input"
-                                    />
-                                </div>
-                                <div>
-                                    <div class="form-group">
-                                        <label for="exampleFormControlSelect2"
-                                            >入住日期</label
-                                        >
-                                        <select
-                                            multiple
-                                            class="form-control"
-                                            id="exampleFormControlSelect2"
-                                        >
-                                            <option>1</option>
-                                            <option>2</option>
-                                            <option>3</option>
-                                            <option>4</option>
-                                            <option>5</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="exampleFormControlSelect3"
-                                            >退房日期</label
-                                        >
-                                        <select
-                                            multiple
-                                            class="form-control"
-                                            id="exampleFormControlSelect3"
-                                        >
-                                            <option>1</option>
-                                            <option>2</option>
-                                            <option>3</option>
-                                            <option>4</option>
-                                            <option>5</option>
-                                        </select>
-                                    </div>
-                                    <span>2天，1晚平日</span>
-                                </div>
-                                <div>
-                                    <span>總計</span>
-                                    <span class="money">9999</span>
-                                </div>
-                                <button>確定送出</button>
-                                <p>
-                                    此預約系統僅預約功能，並不會針對您進行收費
-                                </p>
-                            </form>
-                        </article>
-                        <article class="col-7 boxGrid">
-                            <div class="model-header">
-                                <button
-                                    type="button"
-                                    class="close"
-                                    data-dismiss="modal"
-                                    aria-label="Close"
-                                >
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <!-- 房間資訊 -->
-                            <div>
-                                <h3>Single Room</h3>
-                                <span
-                                    >1人・ 單人床・附早餐・
-                                    衛浴1間・18平方公尺</span
-                                >
-                                <span
-                                    >平日（一～四）價格：1380 /
-                                    假日（五〜日）價格：1500</span
-                                >
-                                <div>
-                                    <div>
-                                        <span>icon</span>
-                                        <span>早餐</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- 訂房資訊 -->
-                            <div>
-                                <h3>訂房資訊</h3>
-                                <span
-                                    >・入住時間：最早15：00，最晚21：00；退房時間：10：00，請自行確認行程安排。</span
-                                >
-                                <span
-                                    >・平日定義週一至週四；假日定義週五至週日及國定假日。</span
-                                >
-                                <span>・好室旅店全面禁止吸菸。</span>
-                                <span
-                                    >・若您有任何問題，歡迎撥打 03-8321155 (
-                                    服務時間 週一至週六 10:00 - 18:00 )。</span
-                                >
-                            </div>
-                            <!-- 預約流程 -->
-                            <div>
-                                <h3>預約流程</h3>
-                                <div>
-                                    <div>
-                                        <span>icon</span>
-                                        <span>說明</span>
-                                    </div>
-                                    <span>> 符號</span>
-                                    <div>
-                                        <span>icon</span>
-                                        <span>說明</span>
-                                    </div>
-                                    <span>> 符號</span>
-                                    <div>
-                                        <span>icon</span>
-                                        <span>說明</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </article>
+        <article>
+            <div class="col-5">
+                <form>
+                    <label>姓名<input type="text"></label>
+                    <label>手機號碼<input type="text"></label>
+                    <label>入住日期<input type="text"></label>
+                    <label>退房日期<input type="text"></label>
+                    <span>2天 1晚平日</span>
+                    <div>
+                        <span>總計</span>
+                        <span>1380</span>
                     </div>
-                </div>
+                    <button>確定送出</button>
+                    <p>此預約系統僅預約功能，並不會對您進行收費</p>
+                </form>
             </div>
-        </div>
+            <div class="col-7"></div>
+        </article>
     </div>
 </template>
+<style lang="scss" scoped>
+    .displayNone {
+        display: none;
+    }
+</style>
 <script>
-import $ from "jquery";
+// import $ from "jquery";
 import Room1 from "../assets/image/room1.png";
 import Room2 from "../assets/image/seeroom2.png";
 import Room3 from "../assets/image/seeroom3.png";
-import DatePicker from "./DatePicker";
+import DatePicker from 'vue2-datepicker';
+import 'vue2-datepicker/index.css';
+import arrow from '../assets/icon/arrow.svg';
 import icon1 from "../assets/icon/icon1.svg";
 import icon2 from "../assets/icon/icon2.svg";
 import icon3 from "../assets/icon/icon3.svg";
@@ -242,6 +141,7 @@ import icon99 from "../assets/icon/icon99.svg";
 export default {
     components: {
         DatePicker,
+        arrow
     },
     data() {
         return {
@@ -302,6 +202,13 @@ export default {
                     tag: icon99
                 }
             ],
+            value: [],
+            allDay: [],
+            allWeek: [],
+            normalDay: [],
+            holiDay: [],
+            openBGBig: false,
+            openOrder: false
         };
     },
     methods: {
@@ -314,15 +221,53 @@ export default {
                 for (let item in vm.roomAmenities) {
                     vm.allSvgBoolean.push(vm.roomAmenities[item])
                 }
+                // console.log(vm.allSvgBoolean)
             });
         },
-        openOrder() {
-            $("#bookingOrder").modal("show");
+        bookingBtn() {
+            const vm = this;
+            vm.openOrder = !vm.openOrder;
         },
         changeBG(key) {
             const vm = this;
             vm.show = key;
             vm.isAnimation = !vm.isAnimation;
+        },
+        disabledDates(date) {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            return date < today || date > new Date(today.getTime() + 365 * 24 * 3600 * 1000);
+        },
+        getAllDay() {
+            let i = 0;
+            const vm = this;
+            let startTime = vm.value[0];
+            let endTime = vm.value[1];
+            while((endTime - startTime) >= 0){
+                // 將起始日期設為 startTime 的時間，每疊代一次重新設置時間點
+                let date = new Date(startTime);
+                let year = date.getFullYear();
+                let month = (date.getMonth() + 1).toString().length === 1 ? "0" + (date.getMonth() + 1).toString() : (date.getMonth() + 1).toString();
+                let day = date.getDate().toString().length === 1 ? "0" + date.getDate().toString() : date.getDate().toString();
+                let week = date.getDay().toString();
+                vm.allDay[i] = `${ year }-${ month }-${ day }`;
+                vm.allWeek[i] = week
+                startTime += 86400000;
+                i += 1;
+            }
+            console.log("week", vm.allWeek);
+            vm.normalDay = vm.allWeek.filter(item => {
+                return item.match(/[1-5]/)
+            })
+            vm.holiDay = vm.allWeek.filter(item => {
+                return item.match(/[0|6]/)
+            }) 
+        },
+        openBigBG() {
+            const vm = this;
+            vm.openBGBig = !vm.openBGBig;
+            console.log(vm.openBGBig)
         }
     },
     created() {
