@@ -89,23 +89,83 @@
         </article>
 
         <!-- Order -->
-        <article>
-            <div class="col-5">
-                <form>
-                    <label>姓名<input type="text"></label>
-                    <label>手機號碼<input type="text"></label>
-                    <label>入住日期<input type="text"></label>
-                    <label>退房日期<input type="text"></label>
-                    <span>2天 1晚平日</span>
-                    <div>
-                        <span>總計</span>
-                        <span>1380</span>
+        <article class="orderGrid orderGrid--style" :class="{ 'displayNone': openOrder === false }">
+            <div class="orderGrid_orderBox">
+                <section class="col-5 orderGrid_orderBox_form orderGrid_orderBox_form--style">
+                    <form class="orderGrid_orderBox_form_content">
+                        <label for="formName" class="labelTitle">姓名</label>
+                        <input type="text" id="formName" class="labelInput">
+
+                        <label for="formTel" class="labelTitle">手機號碼</label>
+                        <input type="text" id="formTel" class="labelInput">
+
+                        <label for="formCheckIn" class="labelTitle">入住日期</label>
+                        <input type="text" id="formCheckIn" class="labelInput">
+
+                        <label for="formCheckOut" class="labelTitle">退房日期</label>
+                        <input type="text" id="formCheckOut" class="labelInput">
+
+                        <span class="form_dayAndNight">2天 1晚平日</span>
+                        <div class="form_total">
+                            <span class="form_total_text">總計</span>
+                            <span class="form_total_price money">1380</span>
+                        </div>
+                        <button class="form_submit">確定送出</button>
+                        <p class="form_remakes">此預約系統僅預約功能，並不會對您進行收費</p>
+                    </form>
+                </section>
+                <section class="col-7 orderGrid_orderBox_roomData">
+                    <div class="orderBox_cancel" @click="bookingBtn"><cancel></cancel></div>
+                    <div class="orderBox_head orderBox">
+                        <h3>{{ roomData.name }}</h3>
+                        <div class="orderBox_content--style">
+                            <span>1人・ 單人床・附早餐・ 衛浴1間・18平方公尺</span>
+                            <span>平日（一～四）價格：1380 / 假日（五〜日）價格：1500</span>
+                        </div>
+                        <div class="orderBox_icons">
+                            <icon1></icon1>
+                        </div>
                     </div>
-                    <button>確定送出</button>
-                    <p>此預約系統僅預約功能，並不會對您進行收費</p>
-                </form>
+                    <div class="orderBox_content orderBox">
+                        <h3>訂房資訊</h3>
+                        <div class="orderBox_content--style">
+                            <span>・入住時間：最早15：00，最晚21：00；退房時間：10：00，請自行確認行程安排。</span>
+                            <span>・平日定義週一至週四；假日定義週五至週日及國定假日。</span>
+                            <span>・好室旅店全面禁止吸菸。 </span>
+                            <span>・若您有任何問題，歡迎撥打 03-8321155 ( 服務時間 週一至週六 10:00 - 18:00 )。</span>
+                        </div>
+                    </div>
+                    <div class="orderBox_process orderBox">
+                        <h3>預約流程</h3>
+                        <div class="orderBox_process_box">
+                            <div class="process_box process_box--style">
+                                <p class="process_box_icon"><process1></process1></p>
+                                <p class="process_box_text">
+                                    <span>送出線上預約單</span>
+                                </p>
+                            </div>
+                            <surface1 class="process_arrow"></surface1>
+                            <div class="process_box process_box--style">
+                                <p class="process_box_icon"><process2></process2></p>
+                                <p class="process_box_text">
+                                    <span>系統立即回覆是否預訂成功</span>
+                                    <span>並以簡訊發送訂房通知</span>
+                                    <span>(若未收到簡訊請來電確認)</span>
+                                </p>
+                            </div>
+                            <surface1 class="process_arrow"></surface1>
+                            <div class="process_box process_box--style">
+                                <p class="process_box_icon"><process3></process3></p>
+                                <p class="process_box_text">
+                                    <span>入住當日憑訂房通知</span>
+                                    <span>以現金或刷卡付款即可</span>
+                                    <span>(僅接受VISA.JCB.銀聯卡)</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
             </div>
-            <div class="col-7"></div>
         </article>
     </div>
 </template>
@@ -122,6 +182,11 @@ import Room3 from "../assets/image/seeroom3.png";
 import DatePicker from 'vue2-datepicker';
 import 'vue2-datepicker/index.css';
 import arrow from '../assets/icon/arrow.svg';
+import cancel from '../assets/icon/cancel.svg';
+import surface1 from '../assets/icon/surface1.svg';
+import process1 from '../assets/icon/process1.svg';
+import process2 from '../assets/icon/process2.svg';
+import process3 from '../assets/icon/process3.svg';
 import icon1 from "../assets/icon/icon1.svg";
 import icon2 from "../assets/icon/icon2.svg";
 import icon3 from "../assets/icon/icon3.svg";
@@ -141,7 +206,13 @@ import icon99 from "../assets/icon/icon99.svg";
 export default {
     components: {
         DatePicker,
-        arrow
+        arrow,
+        cancel,
+        icon1,
+        surface1,
+        process1,
+        process2,
+        process3
     },
     data() {
         return {

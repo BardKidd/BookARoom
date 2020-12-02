@@ -17,8 +17,7 @@
     > .bookRoom_back {
         color: $primary;
         font-size: fontSize(14px);
-        width: 100%;
-        justify-content: flex-start;
+        position: absolute;
     }
     > .bookRoom_booking {
         width: 60%;

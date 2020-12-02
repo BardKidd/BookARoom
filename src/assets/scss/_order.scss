@@ -1,3 +1,181 @@
-.boxGrid {
-    @include display_inline-flex;
+.orderGrid {
+    width: 100%;
+    height: 100vh;
+    overflow-y: hidden;
+    position: fixed;
+    &--style {
+        background-color: rgba(255, 255, 255, 0.8);
+    }
+}
+.orderGrid_orderBox {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 80%;
+    transform: translate(-50%, -50%);
+    border: 1px solid $primary;
+    background-color: $white;
+    > section {
+        @include display_inline-flex;
+    }
+    > .orderGrid_orderBox_form {
+        padding: 5% 5% 1%;
+        &--style {
+            background-color: $primary;
+            color: $white;
+        }
+    }
+    > .orderGrid_orderBox_roomData {
+        background-color: $white;
+    }
+}
+.orderGrid_orderBox_form_content {
+    width: 100%;
+    > label, span, div, button, p, input {
+        width: 100%;
+        @include display_flex;
+    }
+    > .labelTitle {
+        font-size: fontSize(14px);
+        line-height: fontSize(20px);
+    }
+    > .labelInput {
+        font-size: fontSize(16px);
+        line-height: fontSize(32px);
+        margin-bottom: 1rem;
+    }
+    > .form_dayAndNight {
+        color: $other;
+        font-size: fontSize(14px);
+        line-height: fontSize(20px);
+        border-bottom: 1px solid $other;
+        padding-bottom: 1rem;
+        margin-bottom: 1rem;
+    }
+    > .form_total {
+        > .form_total_text {
+            @include display_flex;
+            justify-content: flex-end;
+            font-size: fontSize(14px);
+            line-height: fontSize(20px);
+        }
+        > .form_total_price {
+            @include display_flex;
+            justify-content: flex-end;
+            font-size: fontSize(36px);
+            line-height: fontSize(72px);
+            margin-bottom: 1rem;
+        }
+    }
+    > .form_submit {
+        border: none;
+        background-color: $other;
+        color: $white;
+        font-size: fontSize(18px);
+        line-height: fontSize(27px);
+        @include display_flex;
+        justify-content: center;
+        padding: 0.5rem 0;
+        font-weight: bold;
+    }
+    > .form_remakes {
+        font-size: fontSize(12px);
+        @include display_flex;
+        justify-content: center;
+        margin-top: 3rem;
+    }
+}
+.orderBox_cancel {
+    position: relative;
+    width: 100%;
+    text-align: right;
+    top: -2rem;
+    right: 2rem;
+    color: $primary;
+    border: none;
+    background-color: transparent;
+    font-size: fontSize(16px);
+    font-weight: bold;
+    cursor: pointer;
+}
+.orderBox {
+    border-top: 1px solid #ddd;
+    width: 90%;
+    padding-top: 2.5rem;
+}
+.orderBox_head {
+    > h3 {
+        font-size: fontSize(33px);
+        line-height: fontSize(66px);
+        font-weight: bold;
+        position: absolute;
+        top: -2%;
+        background-color: $white;
+    }
+}
+.orderBox_content {
+    > h3 {
+        font-size: fontSize(24px);
+        line-height: fontSize(48px);
+        font-weight: bold;
+        position: absolute;
+        top: 32%;
+        background-color: $white;
+    }
+    &--style {
+        margin-bottom: 2rem;
+        > span {
+            @include display_flex;
+            font-weight: bold;
+            line-height: fontSize(26px);
+        }
+        
+    }
+}
+.orderBox_icons {
+    margin-bottom: 2rem;
+}
+.orderBox_process {
+    > h3 {
+        font-size: fontSize(24px);
+        line-height: fontSize(48px);
+        font-weight: bold;
+        position: absolute;
+        top: 60%;
+        background-color: $white;
+    }
+    > .orderBox_process_box {
+        @include display_inline-flex;
+        width: 100%;
+        align-items: stretch;
+        > .process_box {
+            @include display_inline-flex;
+            flex-grow: 1;
+            > .process_box_icon {
+                background-color: $other;
+                padding: 0.5rem 0;
+                width: 100%;
+                @include display_flex;
+                justify-content: center;
+                margin-bottom: 0;
+            }
+            > .process_box_text {
+                color: $primary;
+                width: 100%;
+                border: 1px solid $other;
+                border-radius: 0 0 8px 8px;
+                font-weight: bold;
+                padding: 1rem 0;
+            }
+        }
+        > .process_arrow {
+            margin: 1rem 1rem 0;
+        }
+    }
+}
+.process_box_text {
+    > span {
+        @include display_flex;
+        justify-content: center;
+    }
 }
