@@ -83,7 +83,7 @@
             <section class="rooomData_monthly">
                 <p class="rooomData_monthly_title">空房狀態查詢</p>
                 <div>
-                    <DatePicker class="datepicker" @change="getAllDay" value-type="timestamp" v-model="value" :default-value="new Date()" :disabled-date="disabledDates" :inline="true" range></DatePicker>
+                    <DatePicker class="datepicker" @change="getAllDay" value-type="timestamp" prefix-class="xmx" v-model="value" :default-value="new Date()" :disabled-date="disabledDates" :inline="true" range></DatePicker>
                 </div>
             </section>
         </article>
@@ -91,36 +91,37 @@
         <!-- Order -->
         <article class="orderGrid orderGrid--style" :class="{ 'displayNone': openOrder === false }">
             <div class="orderGrid_orderBox">
-                <section class="col-5 orderGrid_orderBox_form orderGrid_orderBox_form--style">
-                    <form class="orderGrid_orderBox_form_content">
+                <section class="col-5 orderGrid_orderBox_form orderGrid_orderBox_form--style" @submit="sendOrder()">
+                    <form class="orderGrid_orderBox_form_content" v-if="allDay.length">
                         <label for="formName" class="labelTitle">姓名</label>
-                        <input type="text" id="formName" class="labelInput">
+                        <input type="text" id="formName" class="labelInput" v-model="form.name">
 
                         <label for="formTel" class="labelTitle">手機號碼</label>
-                        <input type="text" id="formTel" class="labelInput">
+                        <input type="text" id="formTel" class="labelInput" v-model="form.tel">
 
                         <label for="formCheckIn" class="labelTitle">入住日期</label>
-                        <input type="text" id="formCheckIn" class="labelInput">
+                        <input type="text" id="formCheckIn" class="labelInput" :value="allDay[0]" disabled>
 
                         <label for="formCheckOut" class="labelTitle">退房日期</label>
-                        <input type="text" id="formCheckOut" class="labelInput">
+                        <input type="text" id="formCheckOut" class="labelInput" :value="allDay[allDay.length - 1]" disabled>
 
-                        <span class="form_dayAndNight">2天 1晚平日</span>
+                        <span class="form_dayAndNight">{{ allDay.length }}天 {{ normalDay.length }}晚平日</span>
                         <div class="form_total">
                             <span class="form_total_text">總計</span>
-                            <span class="form_total_price money">1380</span>
+                            <span class="form_total_price money" v-if="allDay.length > 0">{{ normalDay.length * roomData.normalDayPrice + holiDay.length * roomData.holidayPrice }}</span>
+                            <span class="form_total_price money" v-else>0</span>
                         </div>
                         <button class="form_submit">確定送出</button>
                         <p class="form_remakes">此預約系統僅預約功能，並不會對您進行收費</p>
                     </form>
                 </section>
-                <section class="col-7 orderGrid_orderBox_roomData">
-                    <div class="orderBox_cancel" @click="bookingBtn"><cancel></cancel></div>
+                <section class="col-7 orderGrid_orderBox_roomData" v-if="roomData.descriptionShort.Bed">
+                    <div class="orderBox_cancel"><cancel @click="bookingBtn"></cancel></div>
                     <div class="orderBox_head orderBox">
                         <h3>{{ roomData.name }}</h3>
                         <div class="orderBox_content--style">
-                            <span>1人・ 單人床・附早餐・ 衛浴1間・18平方公尺</span>
-                            <span>平日（一～四）價格：1380 / 假日（五〜日）價格：1500</span>
+                            <span>{{ roomData.descriptionShort.GuestMin }}~{{ roomData.descriptionShort.GuestMax }}人·{{ roomData.descriptionShort.Bed.length }}床·附早餐·衛浴{{ roomData.descriptionShort['Private-Bath'] }}間·{{ roomData.descriptionShort.Footage }}平方公尺</span>
+                            <span>平日（一～四）價格：{{ roomData.normalDayPrice }} / 假日（五〜日）價格：{{ roomData.holidayPrice }}</span>
                         </div>
                         <div class="orderBox_icons">
                             <icon1></icon1>
@@ -129,7 +130,7 @@
                     <div class="orderBox_content orderBox">
                         <h3>訂房資訊</h3>
                         <div class="orderBox_content--style">
-                            <span>・入住時間：最早15：00，最晚21：00；退房時間：10：00，請自行確認行程安排。</span>
+                            <span>・入住時間：最早{{ roomData.checkInAndOut.checkInEarly }}，最晚{{ roomData.checkInAndOut.checkInLate }}；退房時間：{{ roomData.checkInAndOut.checkOut }}，請自行確認行程安排。</span>
                             <span>・平日定義週一至週四；假日定義週五至週日及國定假日。</span>
                             <span>・好室旅店全面禁止吸菸。 </span>
                             <span>・若您有任何問題，歡迎撥打 03-8321155 ( 服務時間 週一至週六 10:00 - 18:00 )。</span>
@@ -202,7 +203,7 @@ import icon12 from "../assets/icon/icon12.svg";
 import icon98 from "../assets/icon/icon98.svg";
 import icon99 from "../assets/icon/icon99.svg";
 
-
+import axios from 'axios';
 export default {
     components: {
         DatePicker,
@@ -216,6 +217,7 @@ export default {
     },
     data() {
         return {
+            API: 'https://challenge.thef2e.com/api/thef2e2019/stage6/room/',
             roomId: "",
             allRoom: [Room1, Room2, Room3],
             show: 0,
@@ -273,13 +275,19 @@ export default {
                     tag: icon99
                 }
             ],
+            section: [],
             value: [],
             allDay: [],
             allWeek: [],
             normalDay: [],
             holiDay: [],
             openBGBig: false,
-            openOrder: false
+            openOrder: false,
+            form: {
+                name: '',
+                tel: '',
+                date: []
+            }
         };
     },
     methods: {
@@ -327,23 +335,60 @@ export default {
                 startTime += 86400000;
                 i += 1;
             }
-            console.log("week", vm.allWeek);
+            console.log("allDay", vm.allDay);
             vm.normalDay = vm.allWeek.filter(item => {
-                return item.match(/[1-5]/)
+                return item.match(/[1-4]/)
             })
             vm.holiDay = vm.allWeek.filter(item => {
-                return item.match(/[0|6]/)
+                return item.match(/[0|6|5]/)
             }) 
         },
         openBigBG() {
             const vm = this;
             vm.openBGBig = !vm.openBGBig;
             console.log(vm.openBGBig)
+        },
+        sendOrder() {
+            const vm = this;
+            const order = vm.form;
+            order.date = vm.allDay;
+            console.log(order)
+            console.log(vm.API + vm.roomId)
+            const token = `Bearer ${process.env.VUE_APP_TOKEN}`;
+            console.log(token)
+            axios.post(vm.API + vm.roomId, {
+                name: order.name,
+                tel: order.tel,
+                date: order.date
+            }, {
+                headers: {
+                    Authorization: token,
+                    Accept: 'application/json',
+                    // 'Content-Type': 'application/json'
+                }
+            }).then((response) => {
+                if (response.data.success) {
+                    console.log('OK');
+                    console.log(response.data.booking);
+                    vm.$router.push('ordercheck')
+                }
+            }).catch(error => {
+                console.log(error)
+            })
+        },
+        sectionSvg() {
+            const vm = this;
+            let sectionSvgBoolean = vm.allSvgBoolean.filter((item) => {
+                console.log('item', item)
+                return item;
+            })
+            console.log('sectionSvgBoolean', sectionSvgBoolean)
         }
     },
     created() {
         this.roomId = this.$route.params.roomId;
         this.getRoomData();
+        this.sectionSvg();
     },
 };
 </script>

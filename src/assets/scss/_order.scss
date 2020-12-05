@@ -27,6 +27,7 @@
     }
     > .orderGrid_orderBox_roomData {
         background-color: $white;
+        padding: 0 2.5rem;
     }
 }
 .orderGrid_orderBox_form_content {
@@ -40,8 +41,8 @@
         line-height: fontSize(20px);
     }
     > .labelInput {
-        font-size: fontSize(16px);
-        line-height: fontSize(32px);
+        font-size: fontSize(22px);
+        line-height: fontSize(44px);
         margin-bottom: 1rem;
     }
     > .form_dayAndNight {
@@ -68,8 +69,8 @@
         }
     }
     > .form_submit {
-        border: none;
-        background-color: $other;
+        border: 1px solid $other;
+        background-color: $primary;
         color: $white;
         font-size: fontSize(18px);
         line-height: fontSize(27px);
@@ -77,6 +78,9 @@
         justify-content: center;
         padding: 0.5rem 0;
         font-weight: bold;
+        &:hover {
+            background-color: $other;
+        }
     }
     > .form_remakes {
         font-size: fontSize(12px);
@@ -96,7 +100,9 @@
     background-color: transparent;
     font-size: fontSize(16px);
     font-weight: bold;
-    cursor: pointer;
+    > svg {
+        cursor: pointer;
+    }
 }
 .orderBox {
     border-top: 1px solid #ddd;
@@ -162,6 +168,7 @@
             > .process_box_text {
                 color: $primary;
                 width: 100%;
+                height: 60%;
                 border: 1px solid $other;
                 border-radius: 0 0 8px 8px;
                 font-weight: bold;

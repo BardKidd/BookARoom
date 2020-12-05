@@ -14,7 +14,7 @@ Vue.use(Vuex)
 axios.interceptors.request.use(
   config => {
     config.headers.Authorization = "Bearer " + process.env.VUE_APP_TOKEN;
-    config.headers.Accept = "application/json"
+    config.headers.Accept = "application/json";
     return config
   },
   err => {

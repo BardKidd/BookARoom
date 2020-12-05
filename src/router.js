@@ -14,6 +14,11 @@ export default new VueRouter({
             path: '/room/:roomId',
             name: 'Rooms',
             component: () => import('./components/Rooms.vue')
+        },
+        {
+            path: '/ordercheck',
+            name: 'OrderCheck',
+            component: () => import('./components/OrderCheck.vue')
         }
     ]
 })
