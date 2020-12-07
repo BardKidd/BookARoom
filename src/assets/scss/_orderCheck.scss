@@ -1,0 +1,48 @@
+.orderCheckBox {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 50%;
+    transform: translate(-50%, -50%);
+    background-color: $primary;
+    color: $white;
+    padding: 5rem;
+}
+.orderCheckBox_cancel {
+    position: absolute;
+    right: 5%;
+    top: 8%;
+    cursor: pointer;
+}
+.orderCheckBox_content {
+    &_icon, &_title, &_text {
+        @include display_flex;
+        justify-content: center;
+    }
+    &_icon {
+        > .checkIconPosition {
+            position: absolute;
+            top: 32%;
+        }
+        > .orderFalse {
+            transform: scale(4);
+            top: 36%;
+        }
+    }
+    &_title {
+        font-size: fontSize(50px);
+        line-height: fontSize(74px);
+        font-weight: bold;
+    }
+    &_text {
+        color: $other;
+        font-size: fontSize(18px);
+        line-height: fontSize(30px);
+        font-weight: bold;
+        > p {
+            width: 100%;
+            margin: 0;
+            text-align: center;
+        }
+    }
+}

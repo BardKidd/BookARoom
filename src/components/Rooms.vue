@@ -92,7 +92,7 @@
         <article class="orderGrid orderGrid--style" :class="{ 'displayNone': openOrder === false }">
             <div class="orderGrid_orderBox">
                 <section class="col-5 orderGrid_orderBox_form orderGrid_orderBox_form--style" @submit="sendOrder()">
-                    <form class="orderGrid_orderBox_form_content" v-if="allDay.length">
+                    <form class="orderGrid_orderBox_form_content" v-if="allDay.length" enctype="application/x-www-form-urlencoded">
                         <label for="formName" class="labelTitle">姓名</label>
                         <input type="text" id="formName" class="labelInput" v-model="form.name">
 
@@ -168,6 +168,10 @@
                 </section>
             </div>
         </article>
+
+        <order-success v-if="orderIsSuccess" :class="{ 'displayNone': openCheck === false }" @closeThis="openThis"></order-success>
+        <order-false v-if="orderIsSuccess === false" :class="{ 'displayNone': openCheck === false }" @closeThis="openThis"></order-false>
+
     </div>
 </template>
 <style lang="scss" scoped>
@@ -176,11 +180,12 @@
     }
 </style>
 <script>
-// import $ from "jquery";
 import Room1 from "../assets/image/room1.png";
 import Room2 from "../assets/image/seeroom2.png";
 import Room3 from "../assets/image/seeroom3.png";
 import DatePicker from 'vue2-datepicker';
+import OrderSuccess from '../components/OrderSuccess.vue';
+import OrderFalse from '../components/OrderFalse.vue';
 import 'vue2-datepicker/index.css';
 import arrow from '../assets/icon/arrow.svg';
 import cancel from '../assets/icon/cancel.svg';
@@ -203,10 +208,11 @@ import icon12 from "../assets/icon/icon12.svg";
 import icon98 from "../assets/icon/icon98.svg";
 import icon99 from "../assets/icon/icon99.svg";
 
-import axios from 'axios';
 export default {
     components: {
         DatePicker,
+        OrderSuccess,
+        OrderFalse,
         arrow,
         cancel,
         icon1,
@@ -283,11 +289,13 @@ export default {
             holiDay: [],
             openBGBig: false,
             openOrder: false,
+            openCheck: false,
+            orderIsSuccess: false,
             form: {
                 name: '',
                 tel: '',
                 date: []
-            }
+            },
         };
     },
     methods: {
@@ -316,7 +324,7 @@ export default {
             const today = new Date();
             today.setHours(0, 0, 0, 0);
 
-            return date < today || date > new Date(today.getTime() + 365 * 24 * 3600 * 1000);
+            return date <= today || date > new Date(today.getTime() + 90 * 24 * 3600 * 1000);
         },
         getAllDay() {
             let i = 0;
@@ -335,7 +343,6 @@ export default {
                 startTime += 86400000;
                 i += 1;
             }
-            console.log("allDay", vm.allDay);
             vm.normalDay = vm.allWeek.filter(item => {
                 return item.match(/[1-4]/)
             })
@@ -346,34 +353,35 @@ export default {
         openBigBG() {
             const vm = this;
             vm.openBGBig = !vm.openBGBig;
-            console.log(vm.openBGBig)
         },
         sendOrder() {
+            const axios = require('axios');
             const vm = this;
-            const order = vm.form;
-            order.date = vm.allDay;
-            console.log(order)
-            console.log(vm.API + vm.roomId)
-            const token = `Bearer ${process.env.VUE_APP_TOKEN}`;
-            console.log(token)
-            axios.post(vm.API + vm.roomId, {
-                name: order.name,
-                tel: order.tel,
-                date: order.date
-            }, {
-                headers: {
-                    Authorization: token,
-                    Accept: 'application/json',
-                    // 'Content-Type': 'application/json'
-                }
-            }).then((response) => {
+            const data = {
+                name: vm.form.name,
+                tel: vm.form.tel,
+                date: vm.allDay
+            };
+            
+            const url = `${vm.API}${vm.roomId}`;
+            let APITOKEN = 'R6GtkM3Xz9FlTCfHVeXllO50AOCAjTXPQvy7xmQcqAbGhGpbcNU4lvn61TuS'
+            const token = `Bearer ${ APITOKEN }`;
+            const headers = {
+                Authorization: token,
+                Accept: 'application/json',
+                'Content-Type': 'application/json'
+            }
+            axios.post(url, data, headers).then((response) => {
                 if (response.data.success) {
-                    console.log('OK');
-                    console.log(response.data.booking);
-                    vm.$router.push('ordercheck')
+                    vm.openCheck = true;
+                    vm.orderIsSuccess = true;
                 }
-            }).catch(error => {
-                console.log(error)
+            }).catch((error) => {
+                if (error) {
+                    vm.openCheck = true
+                    vm.orderIsSuccess = false;
+                    console.log(vm.orderIsSuccess)
+                }
             })
         },
         sectionSvg() {
@@ -383,12 +391,24 @@ export default {
                 return item;
             })
             console.log('sectionSvgBoolean', sectionSvgBoolean)
+        },
+        openThis(change) {
+            const vm = this;
+            if(vm.openCheck) {
+                vm.openCheck = change;
+            }
+        },
+        delAllRoom() {
+            const api = 'https://challenge.thef2e.com/api/thef2e2019/stage6/rooms';
+            const vm = this;
+            vm.$http.delete(api).then();
         }
     },
     created() {
         this.roomId = this.$route.params.roomId;
         this.getRoomData();
         this.sectionSvg();
+        this.delAllRoom();
     },
 };
 </script>
