@@ -110,6 +110,10 @@
     margin-right: 5rem;
     margin-bottom: 3rem;
     position: relative;
+    &--order {
+        display: inline;
+        margin: 0.5rem 3rem 0.5rem 0;
+    }
     > .roomData_precaution_box_icon {
         opacity: 0.3;
         &--style {

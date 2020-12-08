@@ -124,7 +124,9 @@
                             <span>平日（一～四）價格：{{ roomData.normalDayPrice }} / 假日（五〜日）價格：{{ roomData.holidayPrice }}</span>
                         </div>
                         <div class="orderBox_icons">
-                            <icon1></icon1>
+                            <div class="roomData_precaution_box--order" v-for="(icon, key) in allSvg" :key="key" :data-iconBoolean="allSvgBoolean[key]" :class="[allSvgBoolean[key] ? '' : 'displayNone']" >
+                                <span class="roomData_precaution_box_icon--style" :is="icon.tag"></span>
+                            </div>
                         </div>
                     </div>
                     <div class="orderBox_content orderBox">
@@ -308,12 +310,18 @@ export default {
                 for (let item in vm.roomAmenities) {
                     vm.allSvgBoolean.push(vm.roomAmenities[item])
                 }
+                this.sectionSvg();
                 // console.log(vm.allSvgBoolean)
             });
         },
         bookingBtn() {
             const vm = this;
-            vm.openOrder = !vm.openOrder;
+            if(vm.allDay.length > 0) {
+                vm.openOrder = !vm.openOrder;
+            }
+            else {
+                alert('請先選擇日期');
+            }
         },
         changeBG(key) {
             const vm = this;
@@ -386,11 +394,12 @@ export default {
         },
         sectionSvg() {
             const vm = this;
-            let sectionSvgBoolean = vm.allSvgBoolean.filter((item) => {
-                console.log('item', item)
-                return item;
+            console.log(vm.roomAmenities)
+            let sectionAmenities = vm.roomAmenities.filter(item => {
+                return item
             })
-            console.log('sectionSvgBoolean', sectionSvgBoolean)
+            console.log('sectionAmenities', sectionAmenities)
+            console.log(vm.allSvgBoolean)
         },
         openThis(change) {
             const vm = this;
@@ -407,8 +416,7 @@ export default {
     created() {
         this.roomId = this.$route.params.roomId;
         this.getRoomData();
-        this.sectionSvg();
         this.delAllRoom();
-    },
+    }
 };
 </script>
