@@ -171,8 +171,10 @@
             </div>
         </article>
 
-        <order-success v-if="orderIsSuccess" :class="{ 'displayNone': openCheck === false }" @closeThis="openThis"></order-success>
-        <order-false v-if="orderIsSuccess === false" :class="{ 'displayNone': openCheck === false }" @closeThis="openThis"></order-false>
+        <!-- <order-success v-if="this.$store.state.status.orderissuccess" :class="{ 'displayNone': this.$store.state.status.opencheck === false }" @closeThis="openThis"></order-success> -->
+        <order-success v-if="this.$store.state.status.orderissuccess" :class="{ 'displayNone': this.$store.state.status.opencheck === false }"></order-success>
+        
+        <order-false v-if="this.$store.state.status.orderissuccess === false" :class="{ 'displayNone': this.$store.state.status.opencheck === false }" @closeThis="openThis"></order-false>
 
     </div>
 </template>
@@ -230,11 +232,6 @@ export default {
             allRoom: [Room1, Room2, Room3],
             show: 0,
             isActive: 0,
-            roomData: {
-                descriptionShort: {
-                    GuestMin: 0
-                }
-            },
             roomAmenities: {},
             allSvg: [
                 {
@@ -283,7 +280,6 @@ export default {
                     tag: icon99
                 }
             ],
-            section: [],
             value: [],
             allDay: [],
             allWeek: [],
@@ -291,8 +287,8 @@ export default {
             holiDay: [],
             openBGBig: false,
             openOrder: false,
-            openCheck: false,
-            orderIsSuccess: false,
+            // openCheck: false,
+            // orderIsSuccess: false,
             form: {
                 name: '',
                 tel: '',
@@ -303,16 +299,11 @@ export default {
     methods: {
         getRoomData() {
             const vm = this;
-            const api = `https://challenge.thef2e.com/api/thef2e2019/stage6/room/${vm.roomId}`;
-            vm.$http.get(api).then((response) => {
-                vm.roomData = response.data.room[0];
-                vm.roomAmenities = vm.roomData.amenities;
-                for (let item in vm.roomAmenities) {
-                    vm.allSvgBoolean.push(vm.roomAmenities[item])
-                }
-                this.sectionSvg();
-                // console.log(vm.allSvgBoolean)
-            });
+            this.$store.dispatch('getoneroomdata', vm.roomId);
+            vm.roomAmenities = vm.roomData.amenities;
+            for (let item in vm.roomAmenities) {
+                vm.allSvgBoolean.push(vm.roomAmenities[item])
+            }
         },
         bookingBtn() {
             const vm = this;
@@ -363,43 +354,36 @@ export default {
             vm.openBGBig = !vm.openBGBig;
         },
         sendOrder() {
-            const axios = require('axios');
+            // const axios = require('axios');
             const vm = this;
+            let APITOKEN = 'R6GtkM3Xz9FlTCfHVeXllO50AOCAjTXPQvy7xmQcqAbGhGpbcNU4lvn61TuS'
             const data = {
                 name: vm.form.name,
                 tel: vm.form.tel,
-                date: vm.allDay
+                date: vm.allDay,
+                url: `${vm.API}${vm.roomId}`,
+                token: `Bearer ${ APITOKEN }`
             };
+            this.$store.dispatch('sendorder', data);
+            // const url = `${vm.API}${vm.roomId}`;
             
-            const url = `${vm.API}${vm.roomId}`;
-            let APITOKEN = 'R6GtkM3Xz9FlTCfHVeXllO50AOCAjTXPQvy7xmQcqAbGhGpbcNU4lvn61TuS'
-            const token = `Bearer ${ APITOKEN }`;
-            const headers = {
-                Authorization: token,
-                Accept: 'application/json',
-                'Content-Type': 'application/json'
-            }
-            axios.post(url, data, headers).then((response) => {
-                if (response.data.success) {
-                    vm.openCheck = true;
-                    vm.orderIsSuccess = true;
-                }
-            }).catch((error) => {
-                if (error) {
-                    vm.openCheck = true
-                    vm.orderIsSuccess = false;
-                    console.log(vm.orderIsSuccess)
-                }
-            })
-        },
-        sectionSvg() {
-            const vm = this;
-            console.log(vm.roomAmenities)
-            let sectionAmenities = vm.roomAmenities.filter(item => {
-                return item
-            })
-            console.log('sectionAmenities', sectionAmenities)
-            console.log(vm.allSvgBoolean)
+            // const token = `Bearer ${ APITOKEN }`;
+            // const headers = {
+            //     Authorization: token,
+            //     Accept: 'application/json',
+            //     'Content-Type': 'application/json'
+            // }
+            // axios.post(url, data, headers).then((response) => {
+            //     if (response.data.success) {
+            //         vm.openCheck = true;
+            //         vm.orderIsSuccess = true;
+            //     }
+            // }).catch((error) => {
+            //     if (error) {
+            //         vm.openCheck = true
+            //         vm.orderIsSuccess = false;
+            //     }
+            // })
         },
         openThis(change) {
             const vm = this;
@@ -417,6 +401,17 @@ export default {
         this.roomId = this.$route.params.roomId;
         this.getRoomData();
         this.delAllRoom();
+    },
+    computed: {
+        roomData() {
+            return this.$store.state.room;
+        },
+        // orderIsSuccess() {
+        //     return this.$store.state.status.orderissuccess
+        // },
+        // openCheck() {
+        //     return this.$store.state.status.openCheck
+        // }
     }
 };
 </script>

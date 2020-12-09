@@ -29,14 +29,9 @@ export default {
         success,
         right
     },
-    data() {
-        return {
-            openCheck: false
-        }
-    },
     methods: {
         closeCheck() {
-            this.$emit('closeThis', this.openCheck);
+            this.$store.dispatch('closecheck', false);
         }
     }
 }

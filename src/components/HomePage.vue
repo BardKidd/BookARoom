@@ -32,14 +32,15 @@ export default {
     data() {
         return {
             API: 'https://challenge.thef2e.com/api/thef2e2019/stage6/rooms',
-            token: process.env.VUE_APP_TOKEN,
-            totalRooms: [],
             roomId: '',
             show: 0,
             isActive: ''
         };
     },
     methods: {
+        getRooms() {
+            this.$store.dispatch('getroomdata');
+        },
         seeMore(id) {
             const vm = this;
             const api = `https://challenge.thef2e.com/api/thef2e2019/stage6/room/${id}`;
@@ -53,13 +54,15 @@ export default {
         changeBG(key) {
             const vm = this;
             vm.show = key;
-        }
+        },
     },
     created() {
-        this.$http.get(this.API).then(response => {
-            this.totalRooms = response.data.items;
-            console.log(this.totalRooms)
-        })
+        this.getRooms();
+    },
+    computed: {
+        totalRooms() {
+            return this.$store.state.rooms;
+        }
     }
 };
 </script>

@@ -5,6 +5,7 @@ import axios from 'axios'
 import VueAxios from 'vue-axios'
 import Vuex from 'vuex'
 import 'bootstrap'
+import store from './store'
 
 
 Vue.config.productionTip = false
@@ -24,6 +25,7 @@ axios.interceptors.request.use(
 
 new Vue({
   router,
+  store,
   render: h => h(App),
 }).$mount('#app')
 
