@@ -1,6 +1,6 @@
 # 好室旅店 | House Hotel
 
-以 Vuex 來進行網站控制
+以 Vuex 來進行大型網站控制
 
 [網站連結](https://bardkidd.github.io/BookARoom/)
 
