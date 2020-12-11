@@ -1,5 +1,6 @@
 <template>
     <div>
+        <loading :active.sync="this.$store.state.isLoading"></loading>
         <transition name="fade" mode="out-in" appear appear-active-class="fade-out_in">
             <div class="fullScreen homepageConfiguration" :class="[ isAnimation ? 'fade-out_in' : 'fade-leave-to']" :style="{ backgroundImage: 'url(' + allBG[show] + ')' }"></div>
         </transition>

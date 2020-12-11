@@ -6,11 +6,14 @@ import VueAxios from 'vue-axios'
 import Vuex from 'vuex'
 import 'bootstrap'
 import store from './store'
+import Loading from 'vue-loading-overlay'
+import 'vue-loading-overlay/dist/vue-loading.css'
 
 
 Vue.config.productionTip = false
 Vue.use(VueAxios, axios)
 Vue.use(Vuex)
+Vue.component('loading', Loading);
 
 axios.interceptors.request.use(
   config => {

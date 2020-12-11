@@ -1,5 +1,6 @@
 <template>
     <div>
+        <loading :active.sync="this.$store.state.isLoading"></loading>
         <!-- 訂房簡介 -->
         <article class="col-5 bookRoom">
             <div class="bookRoom_BG" :style="{ backgroundImage: 'url(' + allRoom[show] + ')' }" @click.prevent="openBigBG"></div>
@@ -73,7 +74,7 @@
                 </p>
                 <p>・房間裡有AC，當然還有WiFi。</p>
             </section>
-            <section class="roomData_precaution">
+            <section class="roomData_precaution" v-if="roomData.amenities">
                 <div class="roomData_precaution_box" v-for="(icon, key) in allSvg" :key="key">
                     <span class="roomData_precaution_box_icon" :is="icon.tag" :data-iconBoolean="allSvgBoolean[key]" :class="[allSvgBoolean[key] ? 'roomData_precaution_box_icon--style' : '']"></span>
                     <span class="roomData_precaution_box_yes" v-if="allSvgBoolean[key]" :is="yesOrNo[0].tag"></span>
@@ -91,7 +92,7 @@
         <!-- Order -->
         <article class="orderGrid orderGrid--style" :class="{ 'displayNone': openOrder === false }">
             <div class="orderGrid_orderBox">
-                <section class="col-5 orderGrid_orderBox_form orderGrid_orderBox_form--style" @submit="sendOrder()">
+                <section class="col-5 orderGrid_orderBox_form orderGrid_orderBox_form--style" @submit.prevent="sendOrder()">
                     <form class="orderGrid_orderBox_form_content" v-if="allDay.length" enctype="application/x-www-form-urlencoded">
                         <label for="formName" class="labelTitle">姓名</label>
                         <input type="text" id="formName" class="labelInput" v-model="form.name">
@@ -171,9 +172,8 @@
             </div>
         </article>
 
-        <!-- <order-success v-if="this.$store.state.status.orderissuccess" :class="{ 'displayNone': this.$store.state.status.opencheck === false }" @closeThis="openThis"></order-success> -->
         <order-success v-if="this.$store.state.status.orderissuccess" :class="{ 'displayNone': this.$store.state.status.opencheck === false }"></order-success>
-        
+
         <order-false v-if="this.$store.state.status.orderissuccess === false" :class="{ 'displayNone': this.$store.state.status.opencheck === false }" @closeThis="openThis"></order-false>
 
     </div>
@@ -232,7 +232,6 @@ export default {
             allRoom: [Room1, Room2, Room3],
             show: 0,
             isActive: 0,
-            roomAmenities: {},
             allSvg: [
                 {
                     tag: icon1,
@@ -287,8 +286,6 @@ export default {
             holiDay: [],
             openBGBig: false,
             openOrder: false,
-            // openCheck: false,
-            // orderIsSuccess: false,
             form: {
                 name: '',
                 tel: '',
@@ -297,12 +294,15 @@ export default {
         };
     },
     methods: {
-        getRoomData() {
+        async getRoomData() {
             const vm = this;
-            this.$store.dispatch('getoneroomdata', vm.roomId);
-            vm.roomAmenities = vm.roomData.amenities;
-            for (let item in vm.roomAmenities) {
-                vm.allSvgBoolean.push(vm.roomAmenities[item])
+            await this.$store.dispatch('getoneroomdata', vm.roomId);
+            await this.getRoomAmenities();
+        },
+        getRoomAmenities() {
+            const vm = this;
+            for (let item in this.$store.state.room.amenities) {
+                vm.allSvgBoolean.push(this.$store.state.room.amenities[item])
             }
         },
         bookingBtn() {
@@ -354,7 +354,6 @@ export default {
             vm.openBGBig = !vm.openBGBig;
         },
         sendOrder() {
-            // const axios = require('axios');
             const vm = this;
             let APITOKEN = 'R6GtkM3Xz9FlTCfHVeXllO50AOCAjTXPQvy7xmQcqAbGhGpbcNU4lvn61TuS'
             const data = {
@@ -365,25 +364,6 @@ export default {
                 token: `Bearer ${ APITOKEN }`
             };
             this.$store.dispatch('sendorder', data);
-            // const url = `${vm.API}${vm.roomId}`;
-            
-            // const token = `Bearer ${ APITOKEN }`;
-            // const headers = {
-            //     Authorization: token,
-            //     Accept: 'application/json',
-            //     'Content-Type': 'application/json'
-            // }
-            // axios.post(url, data, headers).then((response) => {
-            //     if (response.data.success) {
-            //         vm.openCheck = true;
-            //         vm.orderIsSuccess = true;
-            //     }
-            // }).catch((error) => {
-            //     if (error) {
-            //         vm.openCheck = true
-            //         vm.orderIsSuccess = false;
-            //     }
-            // })
         },
         openThis(change) {
             const vm = this;
@@ -405,13 +385,7 @@ export default {
     computed: {
         roomData() {
             return this.$store.state.room;
-        },
-        // orderIsSuccess() {
-        //     return this.$store.state.status.orderissuccess
-        // },
-        // openCheck() {
-        //     return this.$store.state.status.openCheck
-        // }
+        }
     }
 };
 </script>
