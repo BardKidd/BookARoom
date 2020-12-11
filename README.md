@@ -2,6 +2,8 @@
 
 以 Vuex 來進行大型網站控制
 
+設計稿參考自 [The F2E 2nd 的 Penny 設計師](https://challenge.thef2e.com/user/2232?schedule=3968#works-3968)
+
 [網站連結](https://bardkidd.github.io/BookARoom/)
 
 **網站功能**
